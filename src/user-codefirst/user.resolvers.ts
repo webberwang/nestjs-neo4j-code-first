@@ -8,5 +8,4 @@ export class UserResolver {
   async user() {
     return 'codelab'
   }
-
 }
