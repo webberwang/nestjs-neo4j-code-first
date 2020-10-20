@@ -5,7 +5,7 @@ import { User } from "./user.model";
 export class UserResolver {
 
   @Query(returns => User)
-  async user() {
+  user() {
     return 'codelab'
   }
 }
