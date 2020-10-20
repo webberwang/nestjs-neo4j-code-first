@@ -2,6 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
 directive @cypher(statement: String) on FIELD_DEFINITION
 
 directive @relation(name: String, direction: _RelationDirections, from: String, to: String) on FIELD_DEFINITION | OBJECT
@@ -18,11 +28,11 @@ directive @unique on FIELD_DEFINITION
 
 directive @index on FIELD_DEFINITION
 
-input _UserInput {
+input _NodeInput {
   id: Int!
 }
 
-enum _UserOrdering {
+enum _NodeOrdering {
   id_asc
   id_desc
   name_asc
@@ -31,9 +41,9 @@ enum _UserOrdering {
   _id_desc
 }
 
-input _UserFilter {
-  AND: [_UserFilter!]
-  OR: [_UserFilter!]
+input _NodeFilter {
+  AND: [_NodeFilter!]
+  OR: [_NodeFilter!]
   id: Int
   id_not: Int
   id_in: [Int!]
@@ -54,7 +64,7 @@ input _UserFilter {
   name_not_ends_with: String
 }
 
-type User {
+type Node {
   id: Int!
   name: String
 
@@ -283,32 +293,40 @@ enum _RelationDirections {
 }
 
 type Query {
-  user(filter: _UserFilter): User!
+  _service: _Service!
+  user(filter: _NodeFilter): Node!
 
   """
-  [Generated query](https://grandstack.io/docs/graphql-schema-generation-augmentation#generated-queries) for User type nodes.
+  [Generated query](https://grandstack.io/docs/graphql-schema-generation-augmentation#generated-queries) for Node type nodes.
   """
-  User(id: Int, name: String, _id: String, first: Int, offset: Int, orderBy: [_UserOrdering], filter: _UserFilter): [User]
+  Node(id: Int, name: String, _id: String, first: Int, offset: Int, orderBy: [_NodeOrdering], filter: _NodeFilter): [Node]
+}
+
+type _Service {
+  """
+  The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied
+  """
+  sdl: String
 }
 
 type Mutation {
   """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#create) for [creating](https://neo4j.com/docs/cypher-manual/4.1/clauses/create/#create-nodes) a User node.
+  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#create) for [creating](https://neo4j.com/docs/cypher-manual/4.1/clauses/create/#create-nodes) a Node node.
   """
-  CreateUser(id: Int!, name: String): User
+  CreateNode(id: Int!, name: String): Node
 
   """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#update) for [updating](https://neo4j.com/docs/cypher-manual/4.1/clauses/set/#set-update-a-property) a User node.
+  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#update) for [updating](https://neo4j.com/docs/cypher-manual/4.1/clauses/set/#set-update-a-property) a Node node.
   """
-  UpdateUser(id: Int!, name: String): User
+  UpdateNode(id: Int!, name: String): Node
 
   """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#delete) for [deleting](https://neo4j.com/docs/cypher-manual/4.1/clauses/delete/#delete-delete-single-node) a User node.
+  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#delete) for [deleting](https://neo4j.com/docs/cypher-manual/4.1/clauses/delete/#delete-delete-single-node) a Node node.
   """
-  DeleteUser(id: Int!): User
+  DeleteNode(id: Int!): Node
 
   """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#merge) for [merging](https://neo4j.com/docs/cypher-manual/4.1/clauses/merge/#query-merge-node-derived) a User node.
+  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#merge) for [merging](https://neo4j.com/docs/cypher-manual/4.1/clauses/merge/#query-merge-node-derived) a Node node.
   """
-  MergeUser(id: Int!, name: String): User
+  MergeNode(id: Int!, name: String): Node
 }
