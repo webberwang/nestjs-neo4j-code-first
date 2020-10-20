@@ -20,8 +20,8 @@ export const cLog = (data: any) =>
 @Module({
   imports: [
     UserModule,
-    GraphQLModule.forRootAsync({
-    // GraphQLFederationModule.forRootAsync({
+    // GraphQLModule.forRootAsync({
+    GraphQLFederationModule.forRootAsync({
       useFactory: () =>
       {
         return {
@@ -29,35 +29,12 @@ export const cLog = (data: any) =>
           autoSchemaFile: join(process.cwd(), 'src/user-codefirst/schema.graphql'),
           transformSchema: (schema: GraphQLSchema) =>
           {
-            /**
-             * Get resolvers from Nest.js's code-first approach
-             */
-            const resolvers = extractResolversFromSchema(schema);
-            // cLog(resolvers)
-
-            /**
-             * The schema here doesn't have the code-first typeDefs yet
-             */
-            const typeDefs: string = printSchema(schema)
-            // cLog(typeDefs)
-
-            // This gives us an AST
-            // const typeDefs = extractSchemaDefinitions({ schema })
-            // cLog(typeDefs)
-
-            /**
-             * Either pass in schema OR typeDefs & resolver.
-             */
             const newSchema = makeAugmentedSchema({
-              typeDefs,
-              resolvers,
+              schema,
               config: {
                 isFederated: true
               }
             })
-
-            // console.log(newSchema)
-
             return buildFederatedSchema([newSchema])
           },
           transformAutoSchemaFile: true
