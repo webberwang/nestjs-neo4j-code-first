@@ -28,52 +28,6 @@ directive @unique on FIELD_DEFINITION
 
 directive @index on FIELD_DEFINITION
 
-input _NodeInput {
-  id: Int!
-}
-
-enum _NodeOrdering {
-  id_asc
-  id_desc
-  name_asc
-  name_desc
-  _id_asc
-  _id_desc
-}
-
-input _NodeFilter {
-  AND: [_NodeFilter!]
-  OR: [_NodeFilter!]
-  id: Int
-  id_not: Int
-  id_in: [Int!]
-  id_not_in: [Int!]
-  id_lt: Int
-  id_lte: Int
-  id_gt: Int
-  id_gte: Int
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-}
-
-type Node {
-  id: Int!
-  name: String
-
-  """
-  Generated field for querying the Neo4j [system id](https://neo4j.com/docs/cypher-manual/current/functions/scalar/#functions-id) of this node.
-  """
-  _id: String
-}
-
 """
 Generated Time input object for Neo4j [Temporal field arguments](https://grandstack.io/docs/graphql-temporal-types-datetime/#temporal-query-arguments).
 """
@@ -294,12 +248,6 @@ enum _RelationDirections {
 
 type Query {
   _service: _Service!
-  user(filter: _NodeFilter): Node!
-
-  """
-  [Generated query](https://grandstack.io/docs/graphql-schema-generation-augmentation#generated-queries) for Node type nodes.
-  """
-  Node(id: Int, name: String, _id: String, first: Int, offset: Int, orderBy: [_NodeOrdering], filter: _NodeFilter): [Node]
 }
 
 type _Service {
@@ -307,26 +255,4 @@ type _Service {
   The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied
   """
   sdl: String
-}
-
-type Mutation {
-  """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#create) for [creating](https://neo4j.com/docs/cypher-manual/4.1/clauses/create/#create-nodes) a Node node.
-  """
-  CreateNode(id: Int!, name: String): Node
-
-  """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#update) for [updating](https://neo4j.com/docs/cypher-manual/4.1/clauses/set/#set-update-a-property) a Node node.
-  """
-  UpdateNode(id: Int!, name: String): Node
-
-  """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#delete) for [deleting](https://neo4j.com/docs/cypher-manual/4.1/clauses/delete/#delete-delete-single-node) a Node node.
-  """
-  DeleteNode(id: Int!): Node
-
-  """
-  [Generated mutation](https://grandstack.io/docs/graphql-schema-generation-augmentation/#merge) for [merging](https://neo4j.com/docs/cypher-manual/4.1/clauses/merge/#query-merge-node-derived) a Node node.
-  """
-  MergeNode(id: Int!, name: String): Node
 }

@@ -20,27 +20,53 @@ export const cLog = (data: any) =>
 @Module({
   imports: [
     UserModule,
-    // GraphQLModule.forRootAsync({
-    GraphQLFederationModule.forRootAsync({
+    GraphQLModule.forRootAsync({
       useFactory: () =>
       {
         return {
           include: [UserModule],
-          autoSchemaFile: join(process.cwd(), 'src/user-codefirst/schema.graphql'),
+          autoSchemaFile: true,
           transformSchema: (schema: GraphQLSchema) =>
           {
-            const newSchema = makeAugmentedSchema({
-              schema,
+            const resolvers = extractResolversFromSchema(schema)
+
+            // Our user defined schema
+            const typeDefs: string = printSchema(schema)
+
+            const neo4jExtendedSchema = makeAugmentedSchema({
+              resolvers,
+              typeDefs,
               config: {
-                isFederated: true
-              }
+                isFederated: true,
+              },
             })
-            return buildFederatedSchema([newSchema])
+
+            return buildFederatedSchema([neo4jExtendedSchema])
           },
           transformAutoSchemaFile: true
         }
       }
-    })
+    }),
+    // GraphQLFederationModule.forRootAsync({
+    //   useFactory: () =>
+    //   {
+    //     return {
+    //       include: [UserModule],
+    //       autoSchemaFile: join(process.cwd(), 'src/user-codefirst/schema.graphql'),
+    //       transformSchema: (schema: GraphQLSchema) =>
+    //       {
+    //         const newSchema = makeAugmentedSchema({
+    //           schema,
+    //           config: {
+    //             isFederated: true
+    //           }
+    //         })
+    //         return buildFederatedSchema([newSchema])
+    //       },
+    //       transformAutoSchemaFile: true
+    //     }
+    //   }
+    // })
   ],
   providers: []
 })
